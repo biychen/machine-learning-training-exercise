@@ -127,3 +127,6 @@ x.png
 *-out.json
 *-out.jl
 *-out.xml
+
+# IPython notebook checkpoints folder
+.ipynb_checkpoints
