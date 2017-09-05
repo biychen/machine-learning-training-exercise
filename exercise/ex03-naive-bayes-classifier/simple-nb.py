@@ -1,4 +1,6 @@
 # -*- encoding: utf-8 -*-
+import functools
+
 import numpy as np
 
 
@@ -19,9 +21,10 @@ def loadDataSet():
 
 
 def createVocabList(data_set):
-    vocab_set = set([])
-    for document in data_set:
-        vocab_set = vocab_set | set(document)
+    # vocab_set = set([])
+    # for document in data_set:
+    #     vocab_set = vocab_set | set(document)
+    vocab_set = functools.reduce(lambda x, y: x | set(y), data_set, set([]))
     return list(vocab_set)
 
 

@@ -8,18 +8,18 @@ def load_and_process():
     return result
 
 
-def euclidean_distance(row1, row2):
+def euclidean_distance(row1, row2, columns):
     """
     A simple euclidean distance function
     """
     inner_value = 0
-    for k in row1.columns:
+    for k in columns:
         inner_value += (row1[k] - row2[k]) ** 2
     return math.sqrt(inner_value)
 
 
 def filter_columns(dataframe, excluded):
-    return dataframe[list(set(dataframe.columns) - set(excluded))]
+    return dataframe.drop(excluded, axis='columns')
 
 
 def normalize(dataframe):
@@ -34,7 +34,7 @@ def test_knn(core_name, k, normalize_stat=True):
     else:
         stat = filter_columns(players, distance_excluded_columns)
     core = stat[players.fullname == core_name]
-    distance_series = stat.apply(lambda r: euclidean_distance(core, r), axis='columns')
+    distance_series = stat.apply(lambda r: euclidean_distance(core, r, core.columns), axis='columns')
     distances = pd.DataFrame({
         'dist': distance_series
     }, index=distance_series.index)
@@ -42,6 +42,7 @@ def test_knn(core_name, k, normalize_stat=True):
     neighbors = players.iloc[distances[0:k+1].index].copy()
     neighbors['Distance'] = distances[0:k+1].dist
     return neighbors
+
 
 if __name__ == '__main__':
     print(test_knn('James, LeBron', 5, normalize_stat=False))
